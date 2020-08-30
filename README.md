@@ -21,19 +21,24 @@ in the [Twilight article on Wikipedia](http://en.wikipedia.org/wiki/Twilight).
 
 ```javascript
 // get today's sunlight times for London
-var times = SunCalc.getTimes(new Date(), 51.5, -0.1);
+// 获取今天伦敦的日照时间
+var times = SunCalc.getTimes(new Date(), 51.5, -0.1);// 经度，纬度 
 
 // format sunrise time from the Date object
+// 从Date对象格式化日出时间 hh:mm
 var sunriseStr = times.sunrise.getHours() + ':' + times.sunrise.getMinutes();
 
 // get position of the sun (azimuth and altitude) at today's sunrise
+// 获取今天日出时太阳的位置（当地经度，当地纬度）
 var sunrisePos = SunCalc.getPosition(times.sunrise, 51.5, -0.1);
 
 // get sunrise azimuth in degrees
+// 得到太阳方位角
 var sunriseAzimuth = sunrisePos.azimuth * 180 / Math.PI;
 ```
 
 SunCalc is also available as an NPM package:
+SunCalc也可以作为NPM软件包提供：
 
 ```bash
 $ npm install suncalc
@@ -44,32 +49,35 @@ var SunCalc = require('suncalc');
 ```
 
 
-## Reference
+## Reference调用
 
-### Sunlight times
+### Sunlight times 太阳时间
 
 ```javascript
 SunCalc.getTimes(/*Date*/ date, /*Number*/ latitude, /*Number*/ longitude, /*Number (default=0)*/ height)
+SunCalc.getTimes(/*日期*/ date, /*纬度*/ latitude, /*经度*/ longitude, /*海拔高度（千米） (default=0)*/ height)
 ```
 
 Returns an object with the following properties (each is a `Date` object):
 
-| Property        | Description                                                              |
+返回一个对象具有一下属性（每一个都是一个`Date`对象）
+
+| Property属性        | Description描述                                                              |
 | --------------- | ------------------------------------------------------------------------ |
-| `sunrise`       | sunrise (top edge of the sun appears on the horizon)                     |
-| `sunriseEnd`    | sunrise ends (bottom edge of the sun touches the horizon)                |
-| `goldenHourEnd` | morning golden hour (soft light, best time for photography) ends         |
-| `solarNoon`     | solar noon (sun is in the highest position)                              |
-| `goldenHour`    | evening golden hour starts                                               |
-| `sunsetStart`   | sunset starts (bottom edge of the sun touches the horizon)               |
-| `sunset`        | sunset (sun disappears below the horizon, evening civil twilight starts) |
-| `dusk`          | dusk (evening nautical twilight starts)                                  |
-| `nauticalDusk`  | nautical dusk (evening astronomical twilight starts)                     |
-| `night`         | night starts (dark enough for astronomical observations)                 |
-| `nadir`         | nadir (darkest moment of the night, sun is in the lowest position)       |
-| `nightEnd`      | night ends (morning astronomical twilight starts)                        |
-| `nauticalDawn`  | nautical dawn (morning nautical twilight starts)                         |
-| `dawn`          | dawn (morning nautical twilight ends, morning civil twilight starts)     |
+| `sunrise`       | sunrise 日出(top edge of the sun appears on the horizon  日轮上缘出现在地平线)                     |
+| `sunriseEnd`    | sunrise ends 日出结束(bottom edge of the sun touches the horizon    日轮下缘触及地平线)                |
+| `goldenHourEnd` | 朝霞结束morning golden hour (soft light, best time for photography) ends         |
+| `solarNoon`     | 正午solar noon (sun is in the highest position 太阳位于高度角达到最高)                              |
+| `goldenHour`    | evening golden hour starts  晚霞开始                                               |
+| `sunsetStart`   | sunset starts 日落开始 (bottom edge of the sun touches the horizon 日轮下缘触及地平线)               |
+| `sunset`        | sunset 日落(sun disappears below the horizon, evening civil twilight starts日轮上缘消失在地平线，夜幕降临) |
+| `dusk`          | dusk 暮色 (evening nautical twilight starts 航海夜幕开始)                                  |
+| `nauticalDusk`  | nautical dusk 航海暮色 (evening astronomical twilight starts 天文夜幕开始)                     |
+| `night`         | night starts 入夜 (dark enough for astronomical observations夜色足够黑暗可以进行天文学观察)                 |
+| `nadir`         | nadir天底 (darkest moment of the night, sun is in the lowest position 夜晚的至暗之时，太阳位于最低点)       |
+| `nightEnd`      | night ends夜尽 (morning astronomical twilight starts 天文曙光开始)                        |
+| `nauticalDawn`  | nautical dawn 航海曙光 (morning nautical twilight starts 航海曙光开始)                         |
+| `dawn`          | dawn 破晓(morning nautical twilight ends, morning civil twilight starts航海曙光结束，民用曙光开始)     |
 
 ```javascript
 SunCalc.addTime(/*Number*/ angleInDegrees, /*String*/ morningName, /*String*/ eveningName)
@@ -77,10 +85,12 @@ SunCalc.addTime(/*Number*/ angleInDegrees, /*String*/ morningName, /*String*/ ev
 
 Adds a custom time when the sun reaches the given angle to results returned by `SunCalc.getTimes`.
 
+当太阳到达给定角度时，通过`SunCalc.getTimes`将自定义时间添加到返回的结果中。
+
 `SunCalc.times` property contains all currently defined times.
+`SunCalc.times`属性包含了所有当前已定义的时间
 
-
-### Sun position
+### Sun position太阳位置
 
 ```javascript
 SunCalc.getPosition(/*Date*/ timeAndDate, /*Number*/ latitude, /*Number*/ longitude)
@@ -108,31 +118,35 @@ Returns an object with the following properties:
  * `parallacticAngle`: parallactic angle of the moon in radians
 
 
-### Moon illumination
+### Moon illumination月轮亮度
 
 ```javascript
 SunCalc.getMoonIllumination(/*Date*/ timeAndDate)
 ```
 
 Returns an object with the following properties:
-
+返回一个具有以下属性的对象
  * `fraction`: illuminated fraction of the moon; varies from `0.0` (new moon) to `1.0` (full moon)
+ * 月亮照亮的部分，从`0.0`到`1.0`变化
  * `phase`: moon phase; varies from `0.0` to `1.0`, described below
+ * 月相；从`0.0`到`1.0`变化，描述如下
  * `angle`: midpoint angle in radians of the illuminated limb of the moon reckoned eastward from the north point of the disk;
  the moon is waxing if the angle is negative, and waning if positive
+* 通过月亮照亮的部分从圆盘的正北计算向东偏移角度（以弧度计）的中点；如果角度为负，则月亮在变亮；如果角度为正，则月亮在变暗
 
 Moon phase value should be interpreted like this:
+月相值的解释如下：
 
-| Phase | Name            |
+| Phase相 | Name            |
 | -----:| --------------- |
-| 0     | New Moon        |
-|       | Waxing Crescent |
-| 0.25  | First Quarter   |
-|       | Waxing Gibbous  |
-| 0.5   | Full Moon       |
-|       | Waning Gibbous  |
-| 0.75  | Last Quarter    |
-|       | Waning Crescent |
+| 0     | New Moon 新月       |
+|       | Waxing Crescent 凹月渐亮 |
+| 0.25  | First Quarter 上弦月  |
+|       | Waxing Gibbous 凸月渐满 |
+| 0.5   | Full Moon 满月      |
+|       | Waning Gibbous 满月渐小 |
+| 0.75  | Last Quarter 下弦月   |
+|       | Waning Crescent 凹月渐暗|
 
 By subtracting the `parallacticAngle` from the `angle` one can get the zenith angle of the moons bright limb (anticlockwise).
 The zenith angle can be used do draw the moon shape from the observers perspective (e.g. moon lying on its back).
